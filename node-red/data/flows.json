@@ -1,0 +1,167 @@
+[
+    {
+        "id": "c94a48577bafaee9",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3cb750b9c42ea4cf",
+        "type": "mqtt-broker",
+        "name": "BEIA",
+        "broker": "mqtt.beia-telemetrie.ro",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "abebea10540344c8",
+        "type": "influxdb",
+        "hostname": "influxdb",
+        "port": 8086,
+        "protocol": "http",
+        "database": "training",
+        "name": "Project DB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "910215272419a7b1",
+        "type": "mqtt in",
+        "z": "c94a48577bafaee9",
+        "name": "",
+        "topic": "training/device/dimitrie-constantin/temperature",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "3cb750b9c42ea4cf",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 140,
+        "wires": [
+            [
+                "2f6862c23e9fa1ce",
+                "aaa48265b075ad54"
+            ]
+        ]
+    },
+    {
+        "id": "2f6862c23e9fa1ce",
+        "type": "json",
+        "z": "c94a48577bafaee9",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": false,
+        "x": 190,
+        "y": 260,
+        "wires": [
+            [
+                "50384029c646c5d5"
+            ]
+        ]
+    },
+    {
+        "id": "50384029c646c5d5",
+        "type": "function",
+        "z": "c94a48577bafaee9",
+        "name": "function 1",
+        "func": "let p = msg.payload;\nif (typeof p === \"string\") {\n    try { p = JSON.parse(p); } catch (e) { /* ramane string */ }\n}\n\nlet val;\nif (typeof p === \"object\" && p !== null) {\n    val = p.temperature;\n} else {\n    val = parseFloat(p);\n}\n\nif (val === undefined || isNaN(val)) {\n    node.warn(\"Valoare invalida: \" + JSON.stringify(msg.payload));\n    return null;\n}\n\nmsg.payload = [\n    { temperature: val },\n    { device: \"dimitrie-constantin\" }\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 420,
+        "wires": [
+            [
+                "4060417b11d22ca5",
+                "ac2d8fc147900465"
+            ]
+        ]
+    },
+    {
+        "id": "4060417b11d22ca5",
+        "type": "influxdb out",
+        "z": "c94a48577bafaee9",
+        "influxdb": "abebea10540344c8",
+        "name": "",
+        "measurement": "sensor",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 430,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "ac2d8fc147900465",
+        "type": "debug",
+        "z": "c94a48577bafaee9",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 160,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "aaa48265b075ad54",
+        "type": "debug",
+        "z": "c94a48577bafaee9",
+        "name": "debug in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 80,
+        "wires": []
+    }
+]

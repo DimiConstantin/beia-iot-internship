@@ -1,0 +1,12 @@
+# secrete
+.env
+
+# date generate (se refac singure)
+influxdb/data/
+node-red/data/*.backup
+
+# gunoaie
+node_modules/
+__pycache__/
+*.log
+.DS_Store
