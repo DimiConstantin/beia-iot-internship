@@ -8,6 +8,14 @@
         "env": []
     },
     {
+        "id": "9905b02a938aa90d",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "3cb750b9c42ea4cf",
         "type": "mqtt-broker",
         "name": "BEIA",
@@ -162,6 +170,90 @@
         "statusType": "auto",
         "x": 340,
         "y": 80,
+        "wires": []
+    },
+    {
+        "id": "237265ae3b15b875",
+        "type": "inject",
+        "z": "9905b02a938aa90d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 220,
+        "wires": [
+            [
+                "1a174ddbcefba487"
+            ]
+        ]
+    },
+    {
+        "id": "1a174ddbcefba487",
+        "type": "function",
+        "z": "9905b02a938aa90d",
+        "name": "function 2",
+        "func": "msg.payload = Math.round(Math.random() * 11) + 20;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 300,
+        "wires": [
+            [
+                "f3a44a2e4645a7c2",
+                "4ba681263bb8432c"
+            ]
+        ]
+    },
+    {
+        "id": "f3a44a2e4645a7c2",
+        "type": "mqtt out",
+        "z": "9905b02a938aa90d",
+        "name": "",
+        "topic": "training/device/dimitrie-constantin/temperature",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "3cb750b9c42ea4cf",
+        "x": 500,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4ba681263bb8432c",
+        "type": "debug",
+        "z": "9905b02a938aa90d",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 340,
         "wires": []
     }
 ]

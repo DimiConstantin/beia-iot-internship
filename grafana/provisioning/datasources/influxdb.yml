@@ -1,0 +1,13 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    uid: influxdb
+    url: http://influxdb:8086
+    database: training
+    isDefault: true
+    jsonData:
+      dbName: training
+      httpMode: GET

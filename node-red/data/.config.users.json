@@ -60,6 +60,12 @@
                         }
                     }
                 }
+            },
+            "dialog": {
+                "export": {
+                    "pretty": true,
+                    "json-view": false
+                }
             }
         }
     }
