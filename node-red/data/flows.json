@@ -95,7 +95,7 @@
         "y": 260,
         "wires": [
             [
-                "50384029c646c5d5"
+                "7bf69f4c5b16af35"
             ]
         ]
     },
@@ -103,15 +103,15 @@
         "id": "50384029c646c5d5",
         "type": "function",
         "z": "c94a48577bafaee9",
-        "name": "function 1",
-        "func": "let p = msg.payload;\nif (typeof p === \"string\") {\n    try { p = JSON.parse(p); } catch (e) { /* ramane string */ }\n}\n\nlet val;\nif (typeof p === \"object\" && p !== null) {\n    val = p.temperature;\n} else {\n    val = parseFloat(p);\n}\n\nif (val === undefined || isNaN(val)) {\n    node.warn(\"Valoare invalida: \" + JSON.stringify(msg.payload));\n    return null;\n}\n\nmsg.payload = [\n    { temperature: val },\n    { device: \"dimitrie-constantin\" }\n];\nreturn msg;",
+        "name": "format influx data",
+        "func": "msg.payload = [\n    { temperature: msg.reading.temperature },\n    { device: msg.reading.device }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 220,
+        "x": 290,
         "y": 420,
         "wires": [
             [
@@ -171,6 +171,64 @@
         "x": 340,
         "y": 80,
         "wires": []
+    },
+    {
+        "id": "7bf69f4c5b16af35",
+        "type": "function",
+        "z": "c94a48577bafaee9",
+        "name": "prepare",
+        "func": "let p = msg.payload;\nif (typeof p === \"string\") {\n    try { p = JSON.parse(p); } catch (e) { /* ramane string */ }\n}\n\nlet val;\nif (typeof p === \"object\" && p !== null) {\n    val = p.temperature;\n} else {\n    val = parseFloat(p);\n}\n\nif (val === undefined || isNaN(val)) {\n    node.warn(\"Valoare invalida: \" + JSON.stringify(msg.payload));\n    return null;\n}\n\nmsg.reading = {\n    time: new Date().toISOString(),\n    device: \"dimitrie-constantin\",\n    temperature: val\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 260,
+        "wires": [
+            [
+                "7a9ea8c4c1d01cd6",
+                "50384029c646c5d5"
+            ]
+        ]
+    },
+    {
+        "id": "7a9ea8c4c1d01cd6",
+        "type": "function",
+        "z": "c94a48577bafaee9",
+        "name": "to jsonl",
+        "func": "msg.payload = JSON.stringify(msg.reading);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 220,
+        "wires": [
+            [
+                "21b149a78e086248"
+            ]
+        ]
+    },
+    {
+        "id": "21b149a78e086248",
+        "type": "file",
+        "z": "c94a48577bafaee9",
+        "name": "",
+        "filename": "/data/local/sensor-data.jsonl",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 660,
+        "y": 320,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "237265ae3b15b875",
