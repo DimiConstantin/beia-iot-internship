@@ -10,3 +10,18 @@ node_modules/
 __pycache__/
 *.log
 .DS_Store
+
+
+# External repositories
+AHT_wp4_toolchain_demo/
+core-java-spring/
+
+# Generated/local data
+dimitrie-constantin/sensor-data.jsonl
+local-sync/.sync-state
+blockchain/.anchor-state
+
+blockchain/deployed.json
+
+
+
